@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { listMobiles, getMobile, createMobile, updateMobile, deleteMobile } from '../controllers/mobileController.js';
+import { protect } from '../middleware/authMiddleware.js';
+const upload = multer({ dest: path.join(path.dirname(fileURLToPath(import.meta.url)), '../uploads') });
+const router = Router();
+router.get('/', listMobiles);
+router.get('/brand/:brandId', (req, res, next) => { req.query.brand = req.params.brandId; next(); }, listMobiles);
+router.get('/:slug', getMobile);
+router.post('/', protect, upload.single('image'), createMobile);
+router.put('/:id', protect, upload.single('image'), updateMobile);
+router.delete('/:id', protect, deleteMobile);
+export default router;

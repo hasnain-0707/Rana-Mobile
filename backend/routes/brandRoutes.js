@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { listBrands, getBrand, createBrand, updateBrand, deleteBrand } from '../controllers/brandController.js';
+import { protect } from '../middleware/authMiddleware.js';
+const upload = multer({ dest: path.join(path.dirname(fileURLToPath(import.meta.url)), '../uploads') });
+const router = Router();
+router.get('/', listBrands);
+router.get('/:slug', getBrand);
+router.post('/', protect, upload.single('logo'), createBrand);
+router.put('/:id', protect, upload.single('logo'), updateBrand);
+router.delete('/:id', protect, deleteBrand);
+export default router;
