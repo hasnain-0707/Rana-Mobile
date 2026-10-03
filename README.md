@@ -23,3 +23,12 @@ SMTP_PASS=your-gmail-app-password
 ```
 
 Use a Google App Password, not your normal Gmail password. Then restart the backend with `npm run dev`.
+
+## Deployment
+
+Deploy the frontend and backend separately. Vercel hosts the frontend; deploy the Express backend to a Node.js web-service host with persistent storage for `backend/uploads`. Vercel serverless storage is temporary and is not suitable for these uploaded images.
+
+1. Before pushing to GitHub, remove any previously committed secrets from Git tracking and rotate credentials that were committed. Keep real values only in `backend/.env` or your host's environment settings.
+2. Deploy the backend and configure `MONGO_URI`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `FRONTEND_URL`. Set the optional `SMTP_*` variables to enable OTP email. `FRONTEND_URL` must be the deployed Vercel origin.
+3. In Vercel, import the GitHub repository and set the project Root Directory to `frontend`. Set `VITE_API_URL` to the backend URL ending in `/api`, then deploy.
+4. In the GitHub repository, ensure `backend/.env`, `node_modules`, and build output are not tracked. If `backend/.env` was committed before, removing it in a new commit does not erase it from Git history; rotate its credentials and clean repository history before making the repository public.
